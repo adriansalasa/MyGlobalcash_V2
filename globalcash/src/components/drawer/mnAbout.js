@@ -37,7 +37,7 @@ export class mnAbout extends Component {
 
   isiDetail() {
     this.props.navigation.navigate('dtlAbout');
-    // alert('tesssss');
+    alert('tesssss');
     
   }
 
