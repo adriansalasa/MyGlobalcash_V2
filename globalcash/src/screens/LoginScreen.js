@@ -31,7 +31,7 @@ class LoginScreen extends Component {
       fgYn: false,
       Bgyn: false,
       cntA: 0,
-      id_bgy: 59,
+      id_bgy: 98,
       tmp_bgy: '',
       isibgy: '',
     };
@@ -99,6 +99,10 @@ class LoginScreen extends Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
+    
+    // const tmrValue = setTimeout(() => {
+    //   this.getBGY();
+    // }, 500);
   }
 
   componentWillUnmount() {
@@ -111,6 +115,24 @@ class LoginScreen extends Component {
   chechk() {
    // AppState.removeEventListener('change', this._handleAppStateChange);
    console.log('kokokokok');
+  }
+
+  getBGY() {
+    axios({
+      method: 'get',
+      url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
+    })
+      .then(res => {
+      console.log(res.data.datas.Bgtime);
+      const tmp_bgy = res.data.datas.Bgtime;
+      this.setState({tmp_bgy: tmp_bgy});
+      console.log('GETBGY: ' + tmp_bgy);
+      })
+      .catch(err => {
+        this.setState({errCodeAbout: err.response.status});
+      }); 
+
+      this.deleteJWT();
   }
 
   myNewTimer() {
@@ -193,26 +215,31 @@ class LoginScreen extends Component {
       // console.log('cntA : ' + brNew);
      
       // this.componentWillUnmount();
+      this.getBGY();
     }else if(nextAppState === 'active'){
       
       console.log('Bgyn : ' + this.state.Bgyn);
       BackgroundTimer.stopBackgroundTimer();
       
-      console.log('nx4: ' + nextAppState);
+      console.log('nx44: ' + nextAppState);
 
-      axios({
-        method: 'get',
-        url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
-      })
-        .then(res => {
-        console.log(res.data.datas.Bgtime);
-        const tmp_bgy = res.data.datas.Bgtime;
-        this.setState({tmp_bgy: tmp_bgy});
-        console.log('tmp_bgy 2 : ' + tmp_bgy)
-        })
-        .catch(err => {
-          this.setState({errCodeAbout: err.response.status});
-        });
+      // axios({
+      //   method: 'get',
+      //   url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
+      // })
+      //   .then(res => {
+      //   console.log(res.data.datas.Bgtime);
+      //   const tmp_bgy = res.data.datas.Bgtime;
+      //   this.setState({tmp_bgy: tmp_bgy});
+      //   console.log('tmp_bgy 2 : ' + tmp_bgy)
+      //   })
+      //   .catch(err => {
+      //     this.setState({errCodeAbout: err.response.status});
+      //   });
+
+      // this.getBGY();
+
+      // console.log('tmp_bgy 2 : ' + this.state.tmp_bgy)
      
     }
   };
@@ -295,12 +322,12 @@ class LoginScreen extends Component {
           <Spinner visible={true} textContent={'Loading...'} />
         ) : (
           [
-            // console.log('tmp bgy 3' + this.state.tmp_bgy),
-            jwt  ? (
-              this.navigate('app'),
-              console.log('fgyn : ' + this.state.fgYn),
-              console.log('cnta :' + this.state.cntA)
+            jwt ? (
+              this.navigate('app')
+              // console.log('fgyn : ' + this.state.fgYn),
+              // console.log('cnta :' + this.state.cntA)
             ) : (
+              // console.log('tmp bgy false' + this.state.tmp_bgy),
               <LoginInput
                 key="login"
                 jwt={jwt}
@@ -314,7 +341,7 @@ class LoginScreen extends Component {
                 disableMobile={disableMobile}
                 Countdown={Countdown}
               />
-            ),
+            )
             // jwt && !this.state.fgYn  ? (
             //   console.log('fgyn2:' + !this.state.fgYn),
             //   <LoginInput
