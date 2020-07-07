@@ -188,14 +188,14 @@ class MainScreen extends Component {
       getHisPinjaman,
       getAbout,
     } = this.props;
-    const stsCek = setTimeout(() => {
+    const stsCek = setInterval(() => {
       this.cekStatus();
     }, 800);
-    // this.intervalID = setTimeout(this.getNasabah.bind(this), 5000);
-    const MyTimer = setTimeout(() => {
+    // this.intervalID = setInterval(this.getNasabah.bind(this), 5000);
+    const MyTimer = setInterval(() => {
       this.pinjStatus();
     }, 1000);
-    const MyTimer2 = setTimeout(() => {
+    const MyTimer2 = setInterval(() => {
       this.pinjStatus3();
     }, 2000);
     const MyTimer3 = setTimeout(() => {

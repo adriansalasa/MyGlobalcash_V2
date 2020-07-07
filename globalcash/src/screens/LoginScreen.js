@@ -44,7 +44,7 @@ class LoginScreen extends Component {
     this.loadJWT = deviceStorage.loadJWT.bind(this);
     this.loadJWT();
   }
-
+  
   newJWT(jwts) {
     this.setState({
       jwt: jwts,
@@ -99,10 +99,6 @@ class LoginScreen extends Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
-    
-    // const tmrValue = setTimeout(() => {
-    //   this.getBGY();
-    // }, 500);
   }
 
   componentWillUnmount() {
@@ -115,24 +111,6 @@ class LoginScreen extends Component {
   chechk() {
    // AppState.removeEventListener('change', this._handleAppStateChange);
    console.log('kokokokok');
-  }
-
-  getBGY() {
-    axios({
-      method: 'get',
-      url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
-    })
-      .then(res => {
-      console.log(res.data.datas.Bgtime);
-      const tmp_bgy = res.data.datas.Bgtime;
-      this.setState({tmp_bgy: tmp_bgy});
-      console.log('GETBGY: ' + tmp_bgy);
-      })
-      .catch(err => {
-        this.setState({errCodeAbout: err.response.status});
-      }); 
-
-      this.deleteJWT();
   }
 
   myNewTimer() {
@@ -200,24 +178,17 @@ class LoginScreen extends Component {
    _handleAppStateChange = nextAppState => {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       console.log('App State: ' + 'App has come to the foreground!');
-      alert('App State: ' + 'App has come to the foreground!');
+      //alert('App State: ' + 'App has come to the foreground!');
     }
     console.log('App State 4: ' + nextAppState);
-    alert('App State 4: ' + nextAppState);
+    //alert('App State 4: ' + nextAppState);
     this.setState({ appState: nextAppState });
-    //this.setState({cntA: 10});
+   
     if(nextAppState === 'background') { 
-      // this.setState({cntA: 10});
       this.myNewTimer();
-      // let brNew = 120;
-      // //this.setState({cntA: 10});
-      // console.log('aaaaa');
-      // console.log('cntA : ' + brNew);
-     
-      // this.componentWillUnmount();
-      this.getBGY();
     }else if(nextAppState === 'active'){
       
+      console.log('jwt : ' + this.state.jwt);
       console.log('Bgyn : ' + this.state.Bgyn);
       BackgroundTimer.stopBackgroundTimer();
       
@@ -225,7 +196,7 @@ class LoginScreen extends Component {
 
       // axios({
       //   method: 'get',
-      //   url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
+      //   url: `http://103.121.149.77:63003/recbgyn`,
       // })
       //   .then(res => {
       //   console.log(res.data.datas.Bgtime);
