@@ -230,16 +230,12 @@ const MainStack = createStackNavigator(
       screen: PPriv,
       navigationOptions: navOptionsHandler,
     },
-
-    Login: {
-      screen: Login,
-      navigationOptions: navOptionsHandler,
-    },
   },
   {initialRouteName: 'Home'},
 );
 
 const appDrawer = createDrawerNavigator(
+  
   {
     drawer: MainStack,
   },
@@ -273,54 +269,6 @@ const MainApp = createSwitchNavigator(
 const AppNavigator = createAppContainer(MainApp);
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-  // state = {
-  //   appState: AppState.currentState,
-  // };
-    this.state = {
-      appState: AppState.currentState,
-    };
-  }
-
-  // componentDidMount() {
-  //   AppState.addEventListener('change', this._handleAppStateChange);
-  // }
-  // componentWillUnmount() {
-  //   AppState.removeEventListener('change', this._handleAppStateChange);
-  // }
-
-  // myNewTimer() {
-  //   BackgroundTimer.runBackgroundTimer(() => { 
-  //     //code that will be called every 3 seconds 
-  //     console.log('tictoc2');
-  //     }, 
-  //     1000);
-  // }
-
-  // enterLogin() {
-  // //  this.navigationOptions.navigate('Login'); 
-  // console.log('nx2: ' + this.state.appState);
-  // }
-
-  // _handleAppStateChange = nextAppState => {
-  //   if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-  //     console.log('App State: ' + 'App has come to the foreground!');
-  //     alert('App State: ' + 'App has come to the foreground!');
-  //   }
-  //   console.log('App State 2: ' + nextAppState);
-  //   alert('App State 2: ' + nextAppState);
-  //   this.setState({ appState: nextAppState });
-  //   if(nextAppState === 'background') { 
-  //     this.myNewTimer();
-  //   }else if(nextAppState === 'active'){
-  //     // console.log('stopp coy');
-  //     BackgroundTimer.stopBackgroundTimer();
-  //     // this.enterLogin();
-  //     console.log('nx: ' + nextAppState);
-  //     this.enterLogin();
-  //   }
-  // };
   render() {
     return (
       <Provider store={store}>

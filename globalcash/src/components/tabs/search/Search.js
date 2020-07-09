@@ -11,6 +11,8 @@ import {getNasabah, setLoading} from '../../../redux/action/NasabahAction';
 import {TEXT} from '../../../constants/env';
 import axios from 'axios';
 // import {getAbout} from '../../../redux/action/AboutAction';
+import deviceStorage from '../../../services/deviceStorage.js';
+import NewLogin from '../../../screens/LoginScreen';
 
 export class Search extends Component {
   constructor(props){
@@ -27,18 +29,19 @@ export class Search extends Component {
 
     this.loadJWT = this.loadJWT.bind(this);
     this.loadJWT();
+    this.deleteJWT = deviceStorage.deleteJWT.bind(this);
 
     // this.loadAbout = this.loadAbout.bind(this);
     // this.loadAbout();
 
-    // this.handlerChangeValue = this.handlerChangeValue.bind(this);
+    this.handlerChangeValue = this.handlerChangeValue.bind(this);
   }
 
-  // handlerChangeValue(stateName, stateValue) {
-  //   this.setState({
-  //     [stateName]: stateValue,
-  //   });
-  // }
+  handlerChangeValue(stateName, stateValue) {
+    this.setState({
+      [stateName]: stateValue,
+    });
+  }
   
 
   async loadJWT() {
@@ -158,13 +161,24 @@ export class Search extends Component {
     }, 200);
    }
 
+   logoutNow = ()=> {
+    this.deleteJWT();
+    //this.props.navigation.navigate('LoginScreen');
+    //BackHandler.addEventListener('hardwareBackPress', this.props.navigation.navigate('Login'));
+    // alert('okkk');
+   //this.removeJWT();
+    //console.log('jwtlogout2 : ' + this.state.jwt);
+    this.props.navigation.navigate('Login');
+   }
+
    exitNow = ()=> {
     Alert.alert(
       'Keluar Aplikasi',
       'Apakah anda yakin akan keluar dari aplikasi..??',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        {text: 'Confirm', onPress: () => BackHandler.exitApp()},
+        // {text: 'Confirm', onPress: () => BackHandler.exitApp()},
+        {text: 'Confirm', onPress: () => this.logoutNow()},
       ],
       { cancelable: false });
       return true;
@@ -220,7 +234,7 @@ export class Search extends Component {
               </View>
               {/* <Text style={styles.labelText}>:</Text> */}
               <View style={styles.labelTextRight}>
-                <Text style={{color: 'white'}} onPress={() => this.exitNow()}>EXIT ></Text>
+                <Text style={{color: 'white'}} onPress={() => this.exitNow()}>EXIT</Text>
               </View>
             </View>
             <Image

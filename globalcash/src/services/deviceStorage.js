@@ -38,6 +38,7 @@ const deviceStorage = {
       console.log('AsyncStorage Error: ' + error.message);
     }
   },
+
 };
 
 export default deviceStorage;

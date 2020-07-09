@@ -97,20 +97,14 @@ class LoginScreen extends Component {
     }
   }
 
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
+  // componentDidMount() {
+  //   AppState.addEventListener('change', this._handleAppStateChange);
+  // }
 
   componentWillUnmount() {
     // Make sure to clear the interval, on unmount
     clearInterval(this.state.Countdown);
-    this.chechk();
    //AppState.removeEventListener('change', this._handleAppStateChange);
-  }
-
-  chechk() {
-   // AppState.removeEventListener('change', this._handleAppStateChange);
-   console.log('kokokokok');
   }
 
   myNewTimer() {
@@ -175,45 +169,45 @@ class LoginScreen extends Component {
         //   });
   }
 
-   _handleAppStateChange = nextAppState => {
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      console.log('App State: ' + 'App has come to the foreground!');
-      //alert('App State: ' + 'App has come to the foreground!');
-    }
-    console.log('App State 4: ' + nextAppState);
-    //alert('App State 4: ' + nextAppState);
-    this.setState({ appState: nextAppState });
+  //  _handleAppStateChange = nextAppState => {
+  //   if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+  //     console.log('App State: ' + 'App has come to the foreground!');
+  //     //alert('App State: ' + 'App has come to the foreground!');
+  //   }
+  //   console.log('App State 4: ' + nextAppState);
+  //   //alert('App State 4: ' + nextAppState);
+  //   this.setState({ appState: nextAppState });
    
-    if(nextAppState === 'background') { 
-      this.myNewTimer();
-    }else if(nextAppState === 'active'){
+  //   if(nextAppState === 'background') { 
+  //     this.myNewTimer();
+  //   }else if(nextAppState === 'active'){
       
-      console.log('jwt : ' + this.state.jwt);
-      console.log('Bgyn : ' + this.state.Bgyn);
-      BackgroundTimer.stopBackgroundTimer();
+  //     console.log('jwt : ' + this.state.jwt);
+  //     console.log('Bgyn : ' + this.state.Bgyn);
+  //     BackgroundTimer.stopBackgroundTimer();
       
-      console.log('nx44: ' + nextAppState);
+  //     console.log('nx44: ' + nextAppState);
 
-      // axios({
-      //   method: 'get',
-      //   url: `http://103.121.149.77:63003/recbgyn`,
-      // })
-      //   .then(res => {
-      //   console.log(res.data.datas.Bgtime);
-      //   const tmp_bgy = res.data.datas.Bgtime;
-      //   this.setState({tmp_bgy: tmp_bgy});
-      //   console.log('tmp_bgy 2 : ' + tmp_bgy)
-      //   })
-      //   .catch(err => {
-      //     this.setState({errCodeAbout: err.response.status});
-      //   });
+  //     // axios({
+  //     //   method: 'get',
+  //     //   url: `http://103.121.149.77:63003/recbgyn`,
+  //     // })
+  //     //   .then(res => {
+  //     //   console.log(res.data.datas.Bgtime);
+  //     //   const tmp_bgy = res.data.datas.Bgtime;
+  //     //   this.setState({tmp_bgy: tmp_bgy});
+  //     //   console.log('tmp_bgy 2 : ' + tmp_bgy)
+  //     //   })
+  //     //   .catch(err => {
+  //     //     this.setState({errCodeAbout: err.response.status});
+  //     //   });
 
-      // this.getBGY();
+  //     // this.getBGY();
 
-      // console.log('tmp_bgy 2 : ' + this.state.tmp_bgy)
+  //     // console.log('tmp_bgy 2 : ' + this.state.tmp_bgy)
      
-    }
-  };
+  //   }
+  // };
 
   generateOTP() {
     this.setState({disableOTP: true});
@@ -292,13 +286,14 @@ class LoginScreen extends Component {
         {loading ? (
           <Spinner visible={true} textContent={'Loading...'} />
         ) : (
+
           [
             jwt ? (
+           
               this.navigate('app')
-              // console.log('fgyn : ' + this.state.fgYn),
-              // console.log('cnta :' + this.state.cntA)
+              
             ) : (
-              // console.log('tmp bgy false' + this.state.tmp_bgy),
+            
               <LoginInput
                 key="login"
                 jwt={jwt}
@@ -313,24 +308,6 @@ class LoginScreen extends Component {
                 Countdown={Countdown}
               />
             )
-            // jwt && !this.state.fgYn  ? (
-            //   console.log('fgyn2:' + !this.state.fgYn),
-            //   <LoginInput
-            //   key="login"
-            //   jwt={jwt}
-            //   deleteJWT={this.deleteJWT}
-            //   handlerChangeValue={this.handlerChangeValue}
-            //   handlerOTP={this.handlerOTP}
-            //   handlerLogin={this.handlerLogin}
-            //   isMobile={this.isMobile}
-            //   mobile={mobile}
-            //   otpInput={otpInput}
-            //   disableMobile={disableMobile}
-            //   Countdown={Countdown}
-            // />
-            // ) : (
-            //   this.navigate('app')
-            // ),
           ]
         )}
       </>
