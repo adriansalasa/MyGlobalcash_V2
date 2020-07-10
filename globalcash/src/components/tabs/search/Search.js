@@ -14,6 +14,7 @@ import axios from 'axios';
 import deviceStorage from '../../../services/deviceStorage.js';
 import NewLogin from '../../../screens/LoginScreen';
 
+
 export class Search extends Component {
   constructor(props){
     super(props);
@@ -22,9 +23,11 @@ export class Search extends Component {
       sRek : false,
       jwt: null,
       errSrc: null,
+      errSrcPh: null,
       firstName: '',
       lastName: '',
       fullName: '',
+      csPhone: '',
     };
 
     this.loadJWT = this.loadJWT.bind(this);
@@ -43,19 +46,22 @@ export class Search extends Component {
     });
   }
   
-
   async loadJWT() {
     try {
       const value = await AsyncStorage.getItem('id_token');
-      console.log(value);
+      
       if (value !== null) {
         getNasabah(value);
+        console.log('value' + value);
         // getNasabah(value);
          this.setState({
           jwt: value,
           // id_bank: this.props.nasabah.id_bank,
 
         });
+
+        //this.setState({csPhone: '0219999999'});
+    
       }
     } catch (error) {
       console.log('AsyncStorage search: ' + error.message);
@@ -118,26 +124,44 @@ export class Search extends Component {
     // this.props.navigation.navigate('AboutUs');
     this.props.navigation.navigate('mnAbout');
   }
-
+  
   callNow() {
-    Linking.openURL(`tel:${'021 82408568'}`);
+    // Linking.openURL(`tel:${'021 82408568'}`);
+    Linking.openURL(`tel:${this.state.csPhone}`);
   }
 
-  callUs(){
+  // callUs(){
+  //   Alert.alert(
+  //   // Linking.openURL(`tel:${0212345678}`)
+  //   TEXT.TEXT_TITLE_APP,
+  //   //'Telpon sekarang...??',
+  //   this.state.csPhone,
+  //   [
+  //     {
+  //       text: 'Cancel',
+  //       onPress: ()=> console.log('tidak di klik'),
+  //       style: 'cancel',
+  //     },
+  //     {text: 'Call', onPress: ()=> this.callNow()}
+  //   ],
+  //     {cancelable: false}
+  //   );
+  // }
+  
+  callUs(){ 
     Alert.alert(
-    // Linking.openURL(`tel:${0212345678}`)
-    TEXT.TEXT_TITLE_APP,
-    'Telpon sekarang...??',
-    [
-      {
-        text: 'Tidak',
-        onPress: ()=> console.log('tidak di klik'),
-        style: 'cancel',
-      },
-      {text: 'Ya', onPress: ()=> this.callNow()}
-    ],
-      {cancelable: false}
-    );
+      TEXT.TEXT_TITLE_APP,
+      this.state.csPhone,
+      [
+        {
+          text: 'Cancel',
+          onPress: ()=> console.log('tidak di klik'),
+          style: 'cancel',
+        },
+        {text: 'Call', onPress: ()=> this.callNow()}
+      ],
+        {cancelable: false}
+      );
   }
 
   GoPPriv() {
@@ -159,6 +183,9 @@ export class Search extends Component {
     const tmrFnd = setTimeout(() => {
       this.findNas();
     }, 200);
+    const tmrPhone = setTimeout(() => {
+      this.findPhone();
+    }, 400);
    }
 
    logoutNow = ()=> {
@@ -191,7 +218,7 @@ export class Search extends Component {
     })
       .then(res => {
         const fndData = res.data;
-        console.log('tesss');
+        //console.log('tesss');
 
         this.setState({errSrc: res.status});
         if (this.state.errSrc === 200) {
@@ -207,6 +234,28 @@ export class Search extends Component {
       })
       .catch(err => {
         this.setState({errSrc: err.response.status});
+        // console.log(this.state.errCode);
+      });
+  }
+
+  findPhone() {
+    axios({
+      method: 'Get',
+      url: `http://103.121.149.77:63003/csphones`,
+    })
+      .then(res => {
+        const fndPhone = res.data.datas;
+        //console.log(fndPhone);
+        
+        this.setState({errSrcPh: res.status});
+       // console.log(this.state.errSrcPh);
+        if (this.state.errSrcPh === 200) {
+          this.setState({csPhone: fndPhone.nmrTelepon});
+          // console.log('csPhones : ' + this.state.csPhones);
+        }
+      })
+      .catch(err => {
+        this.setState({errSrcPh: err.response.status});
         // console.log(this.state.errCode);
       });
   }
@@ -326,6 +375,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 8,
     left: 6,
+  },
+
+  lblAlert: {
+    marginLeft: 90,
   },
 
   labelTextRight: {
