@@ -63,6 +63,9 @@ class MainScreen extends Component {
       btnBayar: false,
       pinjLagi_Aktif: false,
       appState: AppState.currentState,
+      errCodeLogMain: null,
+      myIDMain: 17,
+      myLogoutMain: '',
     };
 
     // this.newJWT = this.newJWT.bind(this);
@@ -190,7 +193,7 @@ class MainScreen extends Component {
     } = this.props;
     const stsCek = setInterval(() => {
       this.cekStatus();
-    }, 800);
+    }, 500);
     // this.intervalID = setInterval(this.getNasabah.bind(this), 5000);
     const MyTimer = setInterval(() => {
       this.pinjStatus();
@@ -200,7 +203,10 @@ class MainScreen extends Component {
     }, 2000);
     const MyTimer3 = setTimeout(() => {
       this.pinjHisStatus();
-    }, 200);
+    }, 80);
+    // const MyLogout = setTimeout(() => {
+    //   this.logOutYn();
+    // }, 10);
 
     // this.cekPembayaran();
     // this.props.getPinjaman3();
@@ -230,6 +236,28 @@ class MainScreen extends Component {
   //     this.props.navigation.navigate('Login');
   //   }
   // };
+  async logOutYn() {
+      axios({
+        method: 'Get',
+        url: `http://103.121.149.77:63003/recbgyn`,
+      })
+        .then(res => {
+        // console.log(res);
+        const tmp_LogoutMain = res.data.datas.bgklik;
+        // console.log('tmp_LogoutMain : ' + tmp_LogoutMain);
+        this.setState({myLogoutMain: tmp_LogoutMain});
+        // console.log(this.state.myLogoutMain);
+          // if(this.state.myLogoutMain === 'y') {
+          //   // console.log('uytuytuytuytuytu');
+          //   this.stop_pinjStatus3;
+          //   this.stop_pinjStatus;
+          //   this.stop_ckStatus;
+          // }
+        })
+        .catch(err => {
+          this.setState({errCodeLogMain: err.response.status});
+        });
+  }
 
   async pinjStatus() {
     if (this.state.errCode === 400 || this.state.errCode === null) {
@@ -340,6 +368,10 @@ class MainScreen extends Component {
       // this.stop_pinjStatus3();
     }
   }
+
+  stop_ckStatus = () => {
+    clearInterval(this.stsCek);
+  };
 
   stop_pinjStatus3 = () => {
     clearInterval(this.MyTimer2);

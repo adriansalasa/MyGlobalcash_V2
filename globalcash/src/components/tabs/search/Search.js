@@ -28,6 +28,8 @@ export class Search extends Component {
       lastName: '',
       fullName: '',
       csPhone: '',
+      myID: 3,
+      errCodeLogOut: null,
     };
 
     this.loadJWT = this.loadJWT.bind(this);
@@ -196,6 +198,24 @@ export class Search extends Component {
    //this.removeJWT();
     //console.log('jwtlogout2 : ' + this.state.jwt);
     this.props.navigation.navigate('Login');
+
+    axios({
+      method: 'post',
+      url: `http://103.121.149.77:63003/recbgyn/${this.state.myID}`,
+      headers: {},
+      data: {
+        Bgtime: 1,
+        bgklik: 'y',
+      },
+    })
+      .then(res => {
+      console.log(res.data.data);
+      const tmp_Logout = res.data.data.bgklik;
+      console.log('tmp_Logout : ' + tmp_Logout);
+      })
+      .catch(err => {
+        this.setState({errCodeLogOut: err.response.status});
+      });
    }
 
    exitNow = ()=> {
