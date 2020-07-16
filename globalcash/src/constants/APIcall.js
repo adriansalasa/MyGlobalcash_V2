@@ -19,7 +19,7 @@ const APIcall = config => {
     function(error) {
       if (!error.response) {
         error.response = {
-          data: 'net work error',
+          data: 'network error',
           status: 500,
         };
       }

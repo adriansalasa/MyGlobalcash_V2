@@ -29,6 +29,7 @@ class MainScreen extends Component {
     this.state = {
       jwt: null,
       loading: true,
+      loadNasabah: 'false',
       besarPinjam: '500000',
       tujuanPinjam: '',
       tanggalPinjam: '',    
@@ -66,12 +67,12 @@ class MainScreen extends Component {
       errCodeLogMain: null,
       myIDMain: 17,
       myLogoutMain: '',
+      nasErr2: null,
     };
 
-    // this.newJWT = this.newJWT.bind(this);
     this.loadJWT = this.loadJWT.bind(this);
     this.loadJWT();
-
+ 
     this.pjmJWT = this.pjmJWT.bind(this);
     this.pjmJWT();
 
@@ -100,6 +101,7 @@ class MainScreen extends Component {
           jwt: value,
           loading: false,
         });
+        //this.cekStatus();
       } else {
         this.setState({
           loading: false,
@@ -191,19 +193,22 @@ class MainScreen extends Component {
       getHisPinjaman,
       getAbout,
     } = this.props;
+
+    const gJWT= setTimeout(() => {
+      this.loadJWT();
+    }, 5);
     const stsCek = setInterval(() => {
       this.cekStatus();
-    }, 500);
-    // this.intervalID = setInterval(this.getNasabah.bind(this), 5000);
-    const MyTimer = setInterval(() => {
-      this.pinjStatus();
-    }, 1000);
-    const MyTimer2 = setInterval(() => {
-      this.pinjStatus3();
-    }, 2000);
-    const MyTimer3 = setTimeout(() => {
-      this.pinjHisStatus();
-    }, 80);
+    }, 800);
+    // const MyTimer = setInterval(() => {
+    //   this.pinjStatus();
+    // }, 1000);
+    // const MyTimer2 = setInterval(() => {
+    //   this.pinjStatus3();
+    // }, 2000);
+    // const MyTimer3 = setTimeout(() => {
+    //   this.pinjHisStatus();
+    // }, 80);
     // const MyLogout = setTimeout(() => {
     //   this.logOutYn();
     // }, 10);
@@ -256,6 +261,7 @@ class MainScreen extends Component {
         })
         .catch(err => {
           this.setState({errCodeLogMain: err.response.status});
+          console.log('error Log Out nich : ' + errCodeLogMain);
         });
   }
 
@@ -424,16 +430,69 @@ class MainScreen extends Component {
   }
 
   async cekStatus() {
-    this.props.getNasabah(this.state.jwt);
-    if(this.prop.nasabah.verified_status !== null || this.prop.nasabah.verified_status === 1){
-      let looptime = 3000;
-      const timerHandle = setTimeout(() => {
-        if(this.props.nasabah.verified_status === 1)
-      {
-          {this.props.getNasabah(this.state.jwt)}
-      }
-          }, looptime);
-      }
+    //this.loadJWT();
+    //  this.props.getNasabah(this.state.jwt);
+    // if(this.prop.nasabah.verified_status !== null || this.prop.nasabah.verified_status === 1){
+    //   let looptime = 3000;
+    //   const timerHandle = setTimeout(() => {
+    //     if(this.props.nasabah.verified_status === 1)
+    //   {
+    //       {this.props.getNasabah(this.state.jwt)}
+    //   }
+    //       }, looptime);
+    //   }
+
+    axios({
+      method: 'Get',
+      url: `http://103.121.149.77:63003/nasabah/${this.state.jwt}`,
+    })
+      .then(res => {
+        const tmpNasDat = res.status;
+        console.log(tmpNasDat)
+        this.setState({nasErr2: res.status});
+        console.log(this.state.nasErr2);
+
+        if(this.state.nasErr2 === 200) {
+          this.props.getNasabah(this.state.jwt);
+          const MyTimer = setInterval(() => {
+            this.pinjStatus();
+          }, 1000);
+          const MyTimer2 = setInterval(() => {
+            this.pinjStatus3();
+          }, 2000);
+          const MyTimer3 = setTimeout(() => {
+            this.pinjHisStatus();
+          }, 80);
+        }
+      })
+      .catch(err => {
+        this.setState({nasErr2: err.response.status});
+        console.log(this.state.nasErr2);
+        this.stop_pinjStatus3;
+        this.stop_pinjStatus;
+      });
+
+      // console.log('NasErr cekstatus : ' + this.props.NasErr);
+     // console.log(this.state.nasErr2);
+
+      // if(this.state.nasErr2 === 200) {
+      //   this.props.getNasabah(this.state.jwt);
+      //   const MyTimer = setInterval(() => {
+      //     this.pinjStatus();
+      //   }, 1000);
+      //   const MyTimer2 = setInterval(() => {
+      //     this.pinjStatus3();
+      //   }, 2000);
+      //   const MyTimer3 = setTimeout(() => {
+      //     this.pinjHisStatus();
+      //   }, 80);
+       
+      // }else{
+       
+      //      this.stop_pinjStatus3;
+      //     this.stop_pinjStatus;
+      // }
+      console.log(this.state.nasErr2);
   }
 
   async _Ajukan() {
@@ -556,221 +615,242 @@ class MainScreen extends Component {
   }
 
   render() {
-    const {nasabah, pinjaman, virtual, about} = this.props;
+    const {nasabah, pinjaman, virtual, about, NasErr} = this.props;
     let virtualNew = this.state.statVirtual;
 
-    return (
-      <View>
-        {/* <Spinner visible={this.props.loadings} textContent={'Loading...'} /> */}
-        <Header title="Home" isHome={true} navigation={this.props.navigation} />
-        <View style={styles.Container}>
-          <>
-           {!nasabah ? (
-              <Image
-                source={this.state.img}
-                style={{width: 256, height: 300}}
-              />
-            ) : nasabah.verified_status === 1 ? (
-              <Image
-                source={this.state.imgWait}
-                style={{width: 256, height:250}}
-              />
-            ) : null}
+     console.log('NasErr new: ' + this.props.NasErr);
 
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            this.state.historyExist === 1 &&
-            this.state.errCode3 === 400 &&
-            this.state.errCode === 400 &&
-            // this.state.N_status_pinjam === '5' &&
-
-            this.state.rePinjam === 0 &&
-            this.state.hisErrCode === 200  ? (
-              <View style={styles.Lunas}>
-                <Image source={IMAGE.PaymentDone} />
-                <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
-                <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                {/* <Text style={styles.LunasB1}>{about.Caption}</Text> */}
+    if(NasErr === 'network error') {
+      return (
+        <View>
+          {/* <Spinner visible={this.props.loadings} textContent={'Loading...'} /> */}
+            <Header title="Home" isHome={true} navigation={this.props.navigation} />
+              <View style={styles.Container}>
+                <Image source={IMAGE.noConnection} />
               </View>
-            ) : null}
+        </View>
+      )
+    }else if(NasErr === null){
 
-             {nasabah &&
-            nasabah.verified_status === 2 &&
-            this.state.errCode3 === 200 &&
-            this.state.rePinjam === 0 ? (
-              <View style={styles.Lunas}>
-                <Image source={IMAGE.PaymentDone} />
-                <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
-                <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                {/* {this.setState({pinjLagi_Aktif: true})} */}
-              </View>
-            ) : null}
-
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            pinjaman &&
-            pinjaman.status_pinjam === '5' ? (
-            // this.state.N_status_pinjam === '5'  ? (
-              <View style={styles.Lunas}>
-                <Image source={IMAGE.PaymentDone} />
-                <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
-                <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                {/* {this.setState({pinjLagi_Aktif: true})} */}
-              </View>
-            ) : null}
-
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            this.state.errCode3 === 400 &&
-            this.state.errCode === 400 &&
-            this.state.hisErrCode === 400 &&
-            pinjaman === null &&
-            virtualNew === 'null' ? (
-              <>
-                <MainFresh
-                  handlerChangeValue={this.handlerChangeValue}
-                  navigation={this.props.navigation}
+      return (
+        //console.log('NasErr 2: ' + this.props.NasErr),
+        //console.log('nasabah 2: ' + this.props.nasabah.noktp),
+    
+        <View>
+          {/* <Spinner visible={this.props.loadings} textContent={'Loading...'} /> */}
+          <Header title="Home" isHome={true} navigation={this.props.navigation} />
+          <View style={styles.Container}>
+          {/* { NasErr === 'network error' ? (
+            <Image source={IMAGE.noConnection} />
+          ) :  NasErr === null ? ( */}
+            <>
+      
+            {!nasabah ? (
+              //  console.log('NasErr 3n: ' + NasErr),
+              //console.log('nasabah 3: ' + nasabah.verified_status),
+                <Image
+                  source={this.state.img}
+                  style={{width: 256, height: 300}}
                 />
-              </>
-            ) : nasabah &&
-            nasabah.verified_status === 2 &&
-            this.state.rePinjam === 1 ? (
-              <>
-                <MainFresh
-                  handlerChangeValue={this.handlerChangeValue}
-                  navigation={this.props.navigation}
-                />
-              </>
-            ) : null}
-
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            pinjaman &&
-            pinjaman.status_pinjam === '1' ? (
-              <Image
-                source={this.state.usrWait}
-                style={{width: 268, height:250}}
-              />
-              // <Text>{pinjaman.status_pinjam}</Text>
-            // ) : nasabah &&
-            // nasabah.verified_status === 2 &&
-            // pinjaman &&
-            // pinjaman.status_pinjam === '1' && 
-            // this.state.rePinjam === 1 ? (
-            //   <Image
-            //     source={this.state.usrWait}
-            //     style={{width: 268, height:250}}
-            //   />
-            ) : null}
-
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            pinjaman &&
-            pinjaman.status_pinjam === '2' &&
-            virtualNew === 'null' ? (
-              <MainFresh2
-                handlerChangeValue={this.handlerChangeValue}
-                navigation={this.props.navigation}
-              />
-            ) : null}
-
-            {nasabah &&
-            nasabah.verified_status === 2 &&
-            pinjaman &&
-            pinjaman.status_pinjam === '2' &&
-            virtualNew !== 'null' ? (
-              <FormVirtualAcc
-                handlerChangeValue={this.handlerChangeValue}
-                navigation={this.props.navigation}
-              />
-            ) : null}
-
-            <View style={{width: '90%', paddingTop: 20}}>
-              {!nasabah ? (
-                <Btn title="LENGKAPI DATA" onPress={() => this._Ajukan()} />
               ) : nasabah.verified_status === 1 ? (
-                <Btn title="MENUNGGU KONFIRMASI DATA" />
-              // ) : nasabah &&
-              //   nasabah.verified_status === 2 &&
-              //   this.state.historyExist === 0 &&
-              //   pinjaman === null ? (
-              //   <Btn
-              //     title="AJUKAN PINJAMAN"
-              //     onPress={() => this.apply_pinjaman()}
-              //   />
-              ) : nasabah &&
-                nasabah.verified_status === 2 &&
-                this.state.errCode3 === 400 &&
-                this.state.errCode === 400 &&
-                this.state.hisErrCode === 400 &&
-                pinjaman === null ? (
-                <Btn
-                  title="AJUKAN PINJAMAN"
-                  onPress={() => this.apply_pinjaman()}
+                <Image
+                  source={this.state.imgWait}
+                  style={{width: 256, height:250}}
                 />
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              this.state.historyExist === 1 &&
+              this.state.errCode3 === 400 &&
+              this.state.errCode === 400 &&
+              // this.state.N_status_pinjam === '5' &&
+
+              this.state.rePinjam === 0 &&
+              this.state.hisErrCode === 200  ? (
+                <View style={styles.Lunas}>
+                  <Image source={IMAGE.PaymentDone} />
+                  <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
+                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
+                  {/* <Text style={styles.LunasB1}>{about.Caption}</Text> */}
+                </View>
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              this.state.errCode3 === 200 &&
+              this.state.rePinjam === 0 ? (
+                <View style={styles.Lunas}>
+                  <Image source={IMAGE.PaymentDone} />
+                  <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
+                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
+                  {/* {this.setState({pinjLagi_Aktif: true})} */}
+                </View>
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '5' ? (
+              // this.state.N_status_pinjam === '5'  ? (
+                <View style={styles.Lunas}>
+                  <Image source={IMAGE.PaymentDone} />
+                  <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
+                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
+                  {/* {this.setState({pinjLagi_Aktif: true})} */}
+                </View>
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              this.state.errCode3 === 400 &&
+              this.state.errCode === 400 &&
+              this.state.hisErrCode === 400 &&
+              pinjaman === null &&
+              virtualNew === 'null' ? (
+                <>
+                  <MainFresh
+                    handlerChangeValue={this.handlerChangeValue}
+                    navigation={this.props.navigation}
+                  />
+                </>
               ) : nasabah &&
-                nasabah.verified_status === 2 &&
-                this.state.rePinjam === 1 ? (
-                <Btn
-                  title="AJUKAN PINJAMAN"
-                  onPress={() => this.apply_pinjaman()}
-                /> 
-              ) : nasabah &&
-                nasabah.verified_status === 2 &&
-                pinjaman &&
-                pinjaman.status_pinjam === '1' ? (
-                <Btn title="PINJAMAN DIPROSES" />
-              ) : nasabah &&
-                nasabah.verified_status === 2 &&
-                pinjaman &&
-                pinjaman.status_pinjam === '2' && 
-                this.state.btnBayar === false ? (
-                <Btn title="Bayar Sekarang" onPress={() => this.kirimVA()} />
-              ) : nasabah &&
+              nasabah.verified_status === 2 &&
+              this.state.rePinjam === 1 ? (
+                <>
+                  <MainFresh
+                    handlerChangeValue={this.handlerChangeValue}
+                    navigation={this.props.navigation}
+                  />
+                </>
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '1' ? (
+                <Image
+                  source={this.state.usrWait}
+                  style={{width: 268, height:250}}
+                />
+                // <Text>{pinjaman.status_pinjam}</Text>
+              // ) : nasabah &&
+              // nasabah.verified_status === 2 &&
+              // pinjaman &&
+              // pinjaman.status_pinjam === '1' && 
+              // this.state.rePinjam === 1 ? (
+              //   <Image
+              //     source={this.state.usrWait}
+              //     style={{width: 268, height:250}}
+              //   />
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '2' &&
+              virtualNew === 'null' ? (
+                <MainFresh2
+                  handlerChangeValue={this.handlerChangeValue}
+                  navigation={this.props.navigation}
+                />
+              ) : null}
+
+              {nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '2' &&
+              virtualNew !== 'null' ? (
+                <FormVirtualAcc
+                  handlerChangeValue={this.handlerChangeValue}
+                  navigation={this.props.navigation}
+                />
+              ) : null}
+
+              <View style={{width: '90%', paddingTop: 20}}>
+                {!nasabah ? (
+                  <Btn title="LENGKAPI DATA" onPress={() => this._Ajukan()} />
+                ) : nasabah.verified_status === 1 ? (
+                  <Btn title="MENUNGGU KONFIRMASI DATA" />
+                // ) : nasabah &&
+                //   nasabah.verified_status === 2 &&
+                //   this.state.historyExist === 0 &&
+                //   pinjaman === null ? (
+                //   <Btn
+                //     title="AJUKAN PINJAMAN"
+                //     onPress={() => this.apply_pinjaman()}
+                //   />
+                ) : nasabah &&
+                  nasabah.verified_status === 2 &&
+                  this.state.errCode3 === 400 &&
+                  this.state.errCode === 400 &&
+                  this.state.hisErrCode === 400 &&
+                  pinjaman === null ? (
+                  <Btn
+                    title="AJUKAN PINJAMAN"
+                    onPress={() => this.apply_pinjaman()}
+                  />
+                ) : nasabah &&
+                  nasabah.verified_status === 2 &&
+                  this.state.rePinjam === 1 ? (
+                  <Btn
+                    title="AJUKAN PINJAMAN"
+                    onPress={() => this.apply_pinjaman()}
+                  /> 
+                ) : nasabah &&
+                  nasabah.verified_status === 2 &&
+                  pinjaman &&
+                  pinjaman.status_pinjam === '1' ? (
+                  <Btn title="PINJAMAN DIPROSES" />
+                ) : nasabah &&
+                  nasabah.verified_status === 2 &&
+                  pinjaman &&
+                  pinjaman.status_pinjam === '2' && 
+                  this.state.btnBayar === false ? (
+                  <Btn title="Bayar Sekarang" onPress={() => this.kirimVA()} />
+                ) : nasabah &&
+                  nasabah.verified_status === 2 && 
+                  this.state.historyExist === 1  &&
+                  this.state.errCode3 === 400 &&
+                  this.state.errCode === 400 &&
+                  this.state.hisErrCode === 200 &&
+                  this.state.rePinjam === 0 &&
+                  this.state.pinjLagi_Aktif === true
+                  ? (
+                    this.setState({pinjLagi_Aktif: !this.state.pinjLagi_Aktif}),
+                    // console.log('nasabah.verified_status : ' + nasabah.verified_status),
+                    // console.log('historyExist : ' + this.state.historyExist ),
+                    // console.log('errCode3 : ' + this.state.errCode3 ),
+                    // console.log('errCode : ' + this.state.errCode ),
+                    // console.log('hisErrCode : ' + this.state.hisErrCode ),
+                    // console.log('rePinjam : ' + this.state.rePinjam ), 
+                    // console.log('pinjLagi_aktif : ' + !this.state.pinjLagi_Aktif ),
+                    <Btn
+                    title="Ajukan Pinjaman Lagi"
+                    onPress={() => this.ajukanPinjamanLagi()}
+                  />
+                ) : null}
+
+                {nasabah &&
                 nasabah.verified_status === 2 && 
                 this.state.historyExist === 1  &&
                 this.state.errCode3 === 400 &&
                 this.state.errCode === 400 &&
                 this.state.hisErrCode === 200 &&
                 this.state.rePinjam === 0 &&
-                this.state.pinjLagi_Aktif === true
-                ? (
-                  this.setState({pinjLagi_Aktif: !this.state.pinjLagi_Aktif}),
-                  // console.log('nasabah.verified_status : ' + nasabah.verified_status),
-                  // console.log('historyExist : ' + this.state.historyExist ),
-                  // console.log('errCode3 : ' + this.state.errCode3 ),
-                  // console.log('errCode : ' + this.state.errCode ),
-                  // console.log('hisErrCode : ' + this.state.hisErrCode ),
-                  // console.log('rePinjam : ' + this.state.rePinjam ), 
-                  // console.log('pinjLagi_aktif : ' + !this.state.pinjLagi_Aktif ),
+                this.state.pinjLagi_Aktif === false ? (
+                  // this.pinjHisStatus(),
                   <Btn
-                  title="Ajukan Pinjaman Lagi"
-                  onPress={() => this.ajukanPinjamanLagi()}
-                />
-              ) : null}
-
-              {nasabah &&
-              nasabah.verified_status === 2 && 
-              this.state.historyExist === 1  &&
-              this.state.errCode3 === 400 &&
-              this.state.errCode === 400 &&
-              this.state.hisErrCode === 200 &&
-              this.state.rePinjam === 0 &&
-              this.state.pinjLagi_Aktif === false ? (
-                // this.pinjHisStatus(),
-                <Btn
-                  title="Ajukan Pinjaman Lagi"
-                  onPress={() => this.ajukanPinjamanLagi()}
-                /> ) 
-                : null}
-            </View>
-          </>
+                    title="Ajukan Pinjaman Lagi"
+                    onPress={() => this.ajukanPinjamanLagi()}
+                  /> ) 
+                  : null}
+              </View>
+            </>
+          </View>
         </View>
-        {/* <View>
-        <Text>{this.state.historyExist}</Text>
-        </View> */}
-      </View>
-    );
+      );
+    }
   }
 }
 
@@ -821,6 +901,7 @@ const mapStoreToProps = state => ({
   // myVirtual: state.virtual.myVirtual,
   virtual: state.virtual.virtual,
   about: state.about.about,
+  NasErr: state.nasabah.error,
 });
 const mapDispatchToProps = dispatch => ({
   getNasabah: mobile => dispatch(getNasabah(mobile)),

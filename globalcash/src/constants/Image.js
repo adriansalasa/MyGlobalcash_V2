@@ -24,6 +24,7 @@ const IMAGE = {
   logoFB: require('../assets/images/FB40.png'),
   logoTwitter: require('../assets/images/twitter50.png'),
   logoYoutube: require('../assets/images/youcir45.png'),
+  noConnection: require('../assets/images/nointernet.png'),
 };
 
 export {IMAGE};

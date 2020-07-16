@@ -214,7 +214,7 @@ export class Search extends Component {
       console.log('tmp_Logout : ' + tmp_Logout);
       })
       .catch(err => {
-        this.setState({errCodeLogOut: err.response.status});
+        console.log('error eyy : ' + err.response.status);
       });
    }
 
