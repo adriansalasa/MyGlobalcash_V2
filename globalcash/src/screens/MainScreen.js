@@ -67,7 +67,6 @@ class MainScreen extends Component {
       errCodeLogMain: null,
       myIDMain: 17,
       myLogoutMain: '',
-      nasErr2: null,
     };
 
     this.loadJWT = this.loadJWT.bind(this);
@@ -101,7 +100,7 @@ class MainScreen extends Component {
           jwt: value,
           loading: false,
         });
-        //this.cekStatus();
+        this.cekStatus();
       } else {
         this.setState({
           loading: false,
@@ -194,24 +193,24 @@ class MainScreen extends Component {
       getAbout,
     } = this.props;
 
-    const gJWT= setTimeout(() => {
-      this.loadJWT();
-    }, 5);
+    // const gJWT= setTimeout(() => {
+    //   this.loadJWT();
+    // }, 5);
     const stsCek = setInterval(() => {
       this.cekStatus();
-    }, 800);
-    // const MyTimer = setInterval(() => {
-    //   this.pinjStatus();
-    // }, 1000);
-    // const MyTimer2 = setInterval(() => {
-    //   this.pinjStatus3();
-    // }, 2000);
-    // const MyTimer3 = setTimeout(() => {
-    //   this.pinjHisStatus();
-    // }, 80);
-    // const MyLogout = setTimeout(() => {
-    //   this.logOutYn();
-    // }, 10);
+    }, 500);
+    const MyTimer = setInterval(() => {
+      this.pinjStatus();
+    }, 1000);
+    const MyTimer2 = setInterval(() => {
+      this.pinjStatus3();
+    }, 2000);
+    const MyTimer3 = setTimeout(() => {
+      this.pinjHisStatus();
+    }, 80);
+    const MyLogout = setTimeout(() => {
+      this.logOutYn();
+    }, 10);
 
     // this.cekPembayaran();
     // this.props.getPinjaman3();
@@ -430,69 +429,16 @@ class MainScreen extends Component {
   }
 
   async cekStatus() {
-    //this.loadJWT();
-    //  this.props.getNasabah(this.state.jwt);
-    // if(this.prop.nasabah.verified_status !== null || this.prop.nasabah.verified_status === 1){
-    //   let looptime = 3000;
-    //   const timerHandle = setTimeout(() => {
-    //     if(this.props.nasabah.verified_status === 1)
-    //   {
-    //       {this.props.getNasabah(this.state.jwt)}
-    //   }
-    //       }, looptime);
-    //   }
-
-    axios({
-      method: 'Get',
-      url: `http://103.121.149.77:63003/nasabah/${this.state.jwt}`,
-    })
-      .then(res => {
-        const tmpNasDat = res.status;
-        console.log(tmpNasDat)
-        this.setState({nasErr2: res.status});
-        console.log(this.state.nasErr2);
-
-        if(this.state.nasErr2 === 200) {
-          this.props.getNasabah(this.state.jwt);
-          const MyTimer = setInterval(() => {
-            this.pinjStatus();
-          }, 1000);
-          const MyTimer2 = setInterval(() => {
-            this.pinjStatus3();
-          }, 2000);
-          const MyTimer3 = setTimeout(() => {
-            this.pinjHisStatus();
-          }, 80);
-        }
-      })
-      .catch(err => {
-        this.setState({nasErr2: err.response.status});
-        console.log(this.state.nasErr2);
-        this.stop_pinjStatus3;
-        this.stop_pinjStatus;
-      });
-
-      // console.log('NasErr cekstatus : ' + this.props.NasErr);
-     // console.log(this.state.nasErr2);
-
-      // if(this.state.nasErr2 === 200) {
-      //   this.props.getNasabah(this.state.jwt);
-      //   const MyTimer = setInterval(() => {
-      //     this.pinjStatus();
-      //   }, 1000);
-      //   const MyTimer2 = setInterval(() => {
-      //     this.pinjStatus3();
-      //   }, 2000);
-      //   const MyTimer3 = setTimeout(() => {
-      //     this.pinjHisStatus();
-      //   }, 80);
-       
-      // }else{
-       
-      //      this.stop_pinjStatus3;
-      //     this.stop_pinjStatus;
-      // }
-      console.log(this.state.nasErr2);
+    this.props.getNasabah(this.state.jwt);
+    if(this.prop.nasabah.verified_status !== null || this.prop.nasabah.verified_status === 1){
+      let looptime = 3000;
+      const timerHandle = setTimeout(() => {
+        if(this.props.nasabah.verified_status === 1)
+      {
+          {this.props.getNasabah(this.state.jwt)}
+      }
+          }, looptime);
+      }
   }
 
   async _Ajukan() {
@@ -618,20 +564,9 @@ class MainScreen extends Component {
     const {nasabah, pinjaman, virtual, about, NasErr} = this.props;
     let virtualNew = this.state.statVirtual;
 
-     console.log('NasErr new: ' + this.props.NasErr);
-
-    if(NasErr === 'network error') {
-      return (
-        <View>
-          {/* <Spinner visible={this.props.loadings} textContent={'Loading...'} /> */}
-            <Header title="Home" isHome={true} navigation={this.props.navigation} />
-              <View style={styles.Container}>
-                <Image source={IMAGE.noConnection} />
-              </View>
-        </View>
-      )
-    }else if(NasErr === null){
-
+    // { NasErr === 'network error' ? (
+    //   <Image source={IMAGE.noConnection} />
+    // ) : NasErr !== 'network error' ? (
       return (
         //console.log('NasErr 2: ' + this.props.NasErr),
         //console.log('nasabah 2: ' + this.props.nasabah.noktp),
@@ -850,7 +785,7 @@ class MainScreen extends Component {
           </View>
         </View>
       );
-    }
+    
   }
 }
 
