@@ -64,6 +64,7 @@ export class RegFormInput3 extends Component {
                 this.props.handlerChangeValue('emobile1', data)
               }
               error={!this.props.emobile1 && ' '}
+              maxLength={12}
             />
           </View>
           <View style={{alignItems: 'center', height: 70}}>
@@ -102,6 +103,7 @@ export class RegFormInput3 extends Component {
                 this.props.handlerChangeValue('emobile2', data)
               }
               error={!this.props.emobile2 && ' '}
+              maxLength={12}
             />
           </View>
         </Content>

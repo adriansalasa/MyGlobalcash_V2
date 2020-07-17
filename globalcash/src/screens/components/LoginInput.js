@@ -31,6 +31,7 @@ export class LoginInput extends Component {
               }
               placeholder="Nomor Handphone"
               keyboardType="number-pad"
+              maxLength={12}
             />
           </View>
           <View style={{paddingVertical: 5, flexDirection: 'row'}}>

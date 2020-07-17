@@ -252,6 +252,7 @@ export class RegFormInput4 extends Component {
             sts="noktp"
             value={this.props.noktp}
             handlerChangeValue={this.props.handlerChangeValue}
+            maxLength={16}
           />
 
           <View style={styles.InputWrap}>
