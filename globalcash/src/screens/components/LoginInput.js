@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, View, StatusBar, Image, Alert} from 'react-native';
+import {StyleSheet, View, StatusBar, Image, Alert, ToastAndroid, TouchableOpacity, TextInput} from 'react-native';
 import {Input, Button, Text} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -9,10 +9,23 @@ import {Btn, Img} from '../commons/';
 export class LoginInput extends Component {
   constructor(props) {
     super(props);
+
+    // this.state = {
+    //   TextValue: 0,
+    //   isiSaran: '',
+    //   textLength: 0
+    // }
   }
+
+  showWarning() {
+   
+    ToastAndroid.showWithGravity("Tesss", ToastAndroid.SHORT, ToastAndroid.CENTER);
+  }
+
   render() {
     const {mobile, otpInput, disableMobile, Countdown} = this.props;
     return (
+    
       <LinearGradient
         colors={['#4c669f', '#3b5998', '#192f6a']}
         style={styles.LinearGradients}>
@@ -42,14 +55,16 @@ export class LoginInput extends Component {
                 borderTopLeftRadius: 10,
                 borderBottomLeftRadius: 10,
               }}>
-              <Input
+              
+              <TextInput
                 value={otpInput}
                 onChangeText={otpInput =>
                   this.props.handlerChangeValue('otpInput', otpInput)
                 }
                 placeholder="Masukan Kode OTP"
-                keyboardType="number-pad"
+                keyboardType="number-pad"                  
               />
+            
             </View>
             <View
               style={{
@@ -63,6 +78,8 @@ export class LoginInput extends Component {
                 </Text>
               </Button>
             </View>
+          </View>
+          <View>
           </View>
           <Btn title="MASUK" onPress={() => this.props.handlerLogin()} />
           {/* <Text>{mobile}</Text> */}
