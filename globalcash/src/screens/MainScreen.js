@@ -395,14 +395,14 @@ class MainScreen extends Component {
         .then(res => {
           const hisPinjm = res.data;
           // console.log(res.status);
-          console.log(res.data.datas);
+          //console.log(res.data.datas);
           // alert(res.data.datas.length);
           if (res.data.datas.length > 0) {
             this.setState({hisErrCode: res.status});
             clearInterval(this.MyTimer3);
             if (this.state.hisErrCode === 200) {
               this.setState({historyExist: 1});
-              console.log('ada history ' + this.state.historyExist);
+              //console.log('ada history ' + this.state.historyExist);
               // this.stop_pinjStatus3();
               // this.stopInterval();
               if (this.state.historyExist === 1) {
@@ -414,7 +414,7 @@ class MainScreen extends Component {
           } else {
             this.setState({hisErrCode: 400});
             // this.setState({historyExist: 0});
-            console.log('tidak ada history ' + this.state.historyExist);
+            //console.log('tidak ada history ' + this.state.historyExist);
             clearInterval(this.MyTimer3);
           }
         })
@@ -475,14 +475,14 @@ class MainScreen extends Component {
         const {pinjaman} = this.props;
 
         this.props.getPinjaman3(this.state.jwt);
-        console.log('hitungan' + this.state.hitungan );
-        console.log('nomer telepon' + this.state.jwt );
+        //console.log('hitungan' + this.state.hitungan );
+        //console.log('nomer telepon' + this.state.jwt );
         // console.log('pembayaran : ' + pinjaman.status_pinjam);
 
-        if (this.state.hitungan === 2) {
+        //if (this.state.hitungan === 2) {
           // console.log('Nomor ID Bank: ' + virtual.id);
           // console.log('pembayaran : ' + pinjaman.status_pinjam);
-        }
+       // }
       }
     }, 10000);
   }
@@ -516,7 +516,7 @@ class MainScreen extends Component {
 
               this.props.getPinjaman(this.state.jwt);
               alert(res.data.message);
-              console.log(res);
+              //console.log(res);
             })
             .catch(err => {
               //handle error

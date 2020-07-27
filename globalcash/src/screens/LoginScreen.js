@@ -107,67 +107,67 @@ class LoginScreen extends Component {
    //AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  myNewTimer() {
-    //BackgroundTimer.runBackgroundTimer(() => { 
-      //code that will be called every 3 seconds 
-      //console.log('oke bg');
-      //  this.setState({cntA: 10}),
-      //console.log('cnta2 : ' + this.state.cntA);
-      //}, 
-      //1000);
-      // BackgroundTimer.stopBackgroundTimer();
+  // myNewTimer() {
+  //   //BackgroundTimer.runBackgroundTimer(() => { 
+  //     //code that will be called every 3 seconds 
+  //     //console.log('oke bg');
+  //     //  this.setState({cntA: 10}),
+  //     //console.log('cnta2 : ' + this.state.cntA);
+  //     //}, 
+  //     //1000);
+  //     // BackgroundTimer.stopBackgroundTimer();
 
-      let a = 0;
-      let Anew = 0;
-      const newTmrID = BackgroundTimer.setInterval(() => {
-          // this will be executed every 200 ms
-          // even when app is the the background
-          //console.log('tic'),
-          a = a + 1,
-          console.log('bbb' + a);
+  //     let a = 0;
+  //     let Anew = 0;
+  //     const newTmrID = BackgroundTimer.setInterval(() => {
+  //         // this will be executed every 200 ms
+  //         // even when app is the the background
+  //         //console.log('tic'),
+  //         a = a + 1,
+  //         console.log('bbb' + a);
 
-          if (a===5) {
-            Anew = a;
-            a = 0;
-            BackgroundTimer.clearInterval(newTmrID);
+  //         if (a===5) {
+  //           Anew = a;
+  //           a = 0;
+  //           BackgroundTimer.clearInterval(newTmrID);
 
-            axios({
-              method: 'post',
-              url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
-              headers: {},
-              data: {
-                Bgtime: Anew,
-                bgklik: 'y',
-              },
-            })
-              .then(res => {
-                const tmp_bgy = res.data.datas;
-              console.log(res);
-              })
-              .catch(err => {
-                this.setState({errCodeAbout: err.response.status});
-              });
-          }
+  //           axios({
+  //             method: 'post',
+  //             url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
+  //             headers: {},
+  //             data: {
+  //               Bgtime: Anew,
+  //               bgklik: 'y',
+  //             },
+  //           })
+  //             .then(res => {
+  //               const tmp_bgy = res.data.datas;
+  //             console.log(res);
+  //             })
+  //             .catch(err => {
+  //               this.setState({errCodeAbout: err.response.status});
+  //             });
+  //         }
      
-      }, 1000);
+  //     }, 1000);
 
-        // axios({
-        //   method: 'post',
-        //   url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
-        //   headers: {},
-        //   data: {
-        //     Bgtime: '4',
-        //     bgklik: 'y',
-        //   },
-        // })
-        //   .then(res => {
-        //     const tmp_bgy = res.data.datas;
-        //    console.log(res);
-        //   })
-        //   .catch(err => {
-        //     this.setState({errCodeAbout: err.response.status});
-        //   });
-  }
+  //       // axios({
+  //       //   method: 'post',
+  //       //   url: `http://103.121.149.77:63003/recbgyn/${this.state.id_bgy}`,
+  //       //   headers: {},
+  //       //   data: {
+  //       //     Bgtime: '4',
+  //       //     bgklik: 'y',
+  //       //   },
+  //       // })
+  //       //   .then(res => {
+  //       //     const tmp_bgy = res.data.datas;
+  //       //    console.log(res);
+  //       //   })
+  //       //   .catch(err => {
+  //       //     this.setState({errCodeAbout: err.response.status});
+  //       //   });
+  // }
 
   //  _handleAppStateChange = nextAppState => {
   //   if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {

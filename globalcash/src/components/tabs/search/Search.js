@@ -54,7 +54,7 @@ export class Search extends Component {
       
       if (value !== null) {
         getNasabah(value);
-        console.log('value' + value);
+        //console.log('value' + value);
         // getNasabah(value);
          this.setState({
           jwt: value,
@@ -209,9 +209,9 @@ export class Search extends Component {
       },
     })
       .then(res => {
-      console.log(res.data.data);
+      //console.log(res.data.data);
       const tmp_Logout = res.data.data.bgklik;
-      console.log('tmp_Logout : ' + tmp_Logout);
+      //console.log('tmp_Logout : ' + tmp_Logout);
       })
       .catch(err => {
         console.log('error eyy : ' + err.response.status);

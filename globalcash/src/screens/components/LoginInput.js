@@ -56,7 +56,7 @@ export class LoginInput extends Component {
                 borderBottomLeftRadius: 10,
               }}>
               
-              <TextInput
+              <Input
                 value={otpInput}
                 onChangeText={otpInput =>
                   this.props.handlerChangeValue('otpInput', otpInput)
