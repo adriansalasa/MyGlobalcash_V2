@@ -208,9 +208,9 @@ class MainScreen extends Component {
     const MyTimer3 = setTimeout(() => {
       this.pinjHisStatus();
     }, 80);
-    const MyLogout = setTimeout(() => {
-      this.logOutYn();
-    }, 10);
+    // const MyLogout = setTimeout(() => {
+    //   this.logOutYn();
+    // }, 10);
 
     // this.cekPembayaran();
     // this.props.getPinjaman3();
@@ -561,7 +561,7 @@ class MainScreen extends Component {
   }
 
   render() {
-    const {nasabah, pinjaman, virtual, about, NasErr} = this.props;
+    const {nasabah, pinjaman, pinjaman2, pinjaman3, virtual, about, NasErr} = this.props;
     let virtualNew = this.state.statVirtual;
 
     // { NasErr === 'network error' ? (
@@ -570,6 +570,7 @@ class MainScreen extends Component {
       return (
         //console.log('NasErr 2: ' + this.props.NasErr),
         //console.log('nasabah 2: ' + this.props.nasabah.noktp),
+        console.log('this.state.historyExist : ' + this.state.historyExist),
     
         <View>
           {/* <Spinner visible={this.props.loadings} textContent={'Loading...'} /> */}
@@ -579,64 +580,102 @@ class MainScreen extends Component {
             <Image source={IMAGE.noConnection} />
           ) :  NasErr === null ? ( */}
             <>
-      
-            {!nasabah ? (
+
+            {this.state.historyExist === 1 ? (
+                <View style={styles.Lunas}>
+                  <Image source={IMAGE.PaymentDone} />
+                  <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
+                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>                  
+                </View>
+              ):     
+             nasabah === null && this.state.historyExist === null ? (
               //  console.log('NasErr 3n: ' + NasErr),
               //console.log('nasabah 3: ' + nasabah.verified_status),
                 <Image
                   source={this.state.img}
                   style={{width: 256, height: 300}}
                 />
-              ) : nasabah.verified_status === 1 ? (
+              ) : nasabah && nasabah.verified_status === 1 ? (
                 <Image
                   source={this.state.imgWait}
                   style={{width: 256, height:250}}
                 />
+              ) : nasabah && nasabah.verified_status === 2 && pinjaman  === null ? (
+                  <MainFresh
+                    handlerChangeValue={this.handlerChangeValue}
+                    navigation={this.props.navigation}
+                  />
+              ) : nasabah &&
+                nasabah.verified_status === 2 &&
+                pinjaman &&
+                pinjaman.status_pinjam === '1' ? (
+                  <Image
+                  source={this.state.usrWait}
+                  style={{width: 268, height:250}}
+                />
+              ) : nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '2' ? (
+                <MainFresh2
+                  handlerChangeValue={this.handlerChangeValue}
+                  navigation={this.props.navigation}
+                />
               ) : null}
 
-              {nasabah &&
+            {nasabah &&
+              nasabah.verified_status === 2 &&
+              pinjaman &&
+              pinjaman.status_pinjam === '2' &&
+              virtualNew !== 'null' ? (
+                <FormVirtualAcc
+                  handlerChangeValue={this.handlerChangeValue}
+                  navigation={this.props.navigation}
+                />
+              ) : null}
+
+              {/* {nasabah &&
               nasabah.verified_status === 2 &&
               this.state.historyExist === 1 &&
               this.state.errCode3 === 400 &&
               this.state.errCode === 400 &&
-              // this.state.N_status_pinjam === '5' &&
 
               this.state.rePinjam === 0 &&
-              this.state.hisErrCode === 200  ? (
+              this.state.hisErrCode === 200 &&
+              pinjaman &&
+              pinjaman.status_pinjam !== '1' ? (
                 <View style={styles.Lunas}>
                   <Image source={IMAGE.PaymentDone} />
                   <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
-                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                  {/* <Text style={styles.LunasB1}>{about.Caption}</Text> */}
+                  <Text>Terimakasih Sudah mengunakan Jasa kami</Text>                  
                 </View>
-              ) : null}
+              ) : null} */}
 
-              {nasabah &&
+              {/* {nasabah &&
               nasabah.verified_status === 2 &&
               this.state.errCode3 === 200 &&
-              this.state.rePinjam === 0 ? (
+              this.state.rePinjam === 0 &&
+              pinjaman &&
+              pinjaman.status_pinjam !== '1' ? (
                 <View style={styles.Lunas}>
                   <Image source={IMAGE.PaymentDone} />
                   <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
                   <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                  {/* {this.setState({pinjLagi_Aktif: true})} */}
                 </View>
-              ) : null}
+              ) : null} */}
 
-              {nasabah &&
+              {/* {nasabah &&
               nasabah.verified_status === 2 &&
               pinjaman &&
               pinjaman.status_pinjam === '5' ? (
-              // this.state.N_status_pinjam === '5'  ? (
                 <View style={styles.Lunas}>
                   <Image source={IMAGE.PaymentDone} />
                   <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
                   <Text>Terimakasih Sudah mengunakan Jasa kami</Text>
-                  {/* {this.setState({pinjLagi_Aktif: true})} */}
                 </View>
-              ) : null}
+              ) : null} */}
 
-              {nasabah &&
+              {/* {nasabah &&
               nasabah.verified_status === 2 &&
               this.state.errCode3 === 400 &&
               this.state.errCode === 400 &&
@@ -658,9 +697,9 @@ class MainScreen extends Component {
                     navigation={this.props.navigation}
                   />
                 </>
-              ) : null}
+              ) : null} */}
 
-              {nasabah &&
+              {/* {nasabah &&
               nasabah.verified_status === 2 &&
               pinjaman &&
               pinjaman.status_pinjam === '1' ? (
@@ -668,16 +707,6 @@ class MainScreen extends Component {
                   source={this.state.usrWait}
                   style={{width: 268, height:250}}
                 />
-                // <Text>{pinjaman.status_pinjam}</Text>
-              // ) : nasabah &&
-              // nasabah.verified_status === 2 &&
-              // pinjaman &&
-              // pinjaman.status_pinjam === '1' && 
-              // this.state.rePinjam === 1 ? (
-              //   <Image
-              //     source={this.state.usrWait}
-              //     style={{width: 268, height:250}}
-              //   />
               ) : null}
 
               {nasabah &&
@@ -700,38 +729,36 @@ class MainScreen extends Component {
                   handlerChangeValue={this.handlerChangeValue}
                   navigation={this.props.navigation}
                 />
-              ) : null}
+              ) : null} */}
 
               <View style={{width: '90%', paddingTop: 20}}>
-                {!nasabah ? (
+              {this.state.historyExist === 1 ? (
+                     <Btn
+                     title="Ajukan Pinjaman Lagi"
+                     onPress={() => this.ajukanPinjamanLagi()} 
+                     />
+              ): nasabah && nasabah === null && this.state.historyExist === null ? (
                   <Btn title="LENGKAPI DATA" onPress={() => this._Ajukan()} />
-                ) : nasabah.verified_status === 1 ? (
+                ) : nasabah && nasabah.verified_status === 1 ? (
                   <Btn title="MENUNGGU KONFIRMASI DATA" />
+                
                 // ) : nasabah &&
                 //   nasabah.verified_status === 2 &&
-                //   this.state.historyExist === 0 &&
+                //   this.state.errCode3 === 400 &&
+                //   this.state.errCode === 400 &&
+                //   this.state.hisErrCode === 400 &&
                 //   pinjaman === null ? (
                 //   <Btn
                 //     title="AJUKAN PINJAMAN"
                 //     onPress={() => this.apply_pinjaman()}
                 //   />
-                ) : nasabah &&
-                  nasabah.verified_status === 2 &&
-                  this.state.errCode3 === 400 &&
-                  this.state.errCode === 400 &&
-                  this.state.hisErrCode === 400 &&
-                  pinjaman === null ? (
-                  <Btn
-                    title="AJUKAN PINJAMAN"
-                    onPress={() => this.apply_pinjaman()}
-                  />
-                ) : nasabah &&
-                  nasabah.verified_status === 2 &&
-                  this.state.rePinjam === 1 ? (
-                  <Btn
-                    title="AJUKAN PINJAMAN"
-                    onPress={() => this.apply_pinjaman()}
-                  /> 
+                // ) : nasabah &&
+                //   nasabah.verified_status === 2 &&
+                //   this.state.rePinjam === 1 ? (
+                //   <Btn
+                //     title="AJUKAN PINJAMAN"
+                //     onPress={() => this.apply_pinjaman()}
+                //   /> 
                 ) : nasabah &&
                   nasabah.verified_status === 2 &&
                   pinjaman &&
@@ -743,43 +770,48 @@ class MainScreen extends Component {
                   pinjaman.status_pinjam === '2' && 
                   this.state.btnBayar === false ? (
                   <Btn title="Bayar Sekarang" onPress={() => this.kirimVA()} />
+                // ) : nasabah &&
+                //   nasabah.verified_status === 2 && 
+                //   this.state.historyExist === 1  &&
+                //   this.state.errCode3 === 400 &&
+                //   this.state.errCode === 400 &&
+                //   this.state.hisErrCode === 200 &&
+                //   this.state.rePinjam === 0 &&
+                //   this.state.pinjLagi_Aktif === true &&
+                //   pinjaman &&
+                //   pinjaman.status_pinjam !== '1' ? (
+                //     this.setState({pinjLagi_Aktif: !this.state.pinjLagi_Aktif}),
+                //     // console.log('pinjLagi_aktif : ' + !this.state.pinjLagi_Aktif ),
+                //     <Btn
+                //     title="Ajukan Pinjaman Lagi"
+                //     onPress={() => this.ajukanPinjamanLagi()}
+                //   />
                 ) : nasabah &&
-                  nasabah.verified_status === 2 && 
-                  this.state.historyExist === 1  &&
-                  this.state.errCode3 === 400 &&
-                  this.state.errCode === 400 &&
-                  this.state.hisErrCode === 200 &&
-                  this.state.rePinjam === 0 &&
-                  this.state.pinjLagi_Aktif === true
-                  ? (
-                    this.setState({pinjLagi_Aktif: !this.state.pinjLagi_Aktif}),
-                    // console.log('nasabah.verified_status : ' + nasabah.verified_status),
-                    // console.log('historyExist : ' + this.state.historyExist ),
-                    // console.log('errCode3 : ' + this.state.errCode3 ),
-                    // console.log('errCode : ' + this.state.errCode ),
-                    // console.log('hisErrCode : ' + this.state.hisErrCode ),
-                    // console.log('rePinjam : ' + this.state.rePinjam ), 
-                    // console.log('pinjLagi_aktif : ' + !this.state.pinjLagi_Aktif ),
-                    <Btn
-                    title="Ajukan Pinjaman Lagi"
-                    onPress={() => this.ajukanPinjamanLagi()}
-                  />
+                  nasabah.verified_status === 2 &&
+                  pinjaman  === null ? (
+                   <Btn
+                    title="AJUKAN PINJAMAN"
+                    onPress={() => this.apply_pinjaman()}
+                    />
                 ) : null}
+                
 
-                {nasabah &&
+                {/* {nasabah &&
                 nasabah.verified_status === 2 && 
                 this.state.historyExist === 1  &&
                 this.state.errCode3 === 400 &&
                 this.state.errCode === 400 &&
                 this.state.hisErrCode === 200 &&
                 this.state.rePinjam === 0 &&
-                this.state.pinjLagi_Aktif === false ? (
+                this.state.pinjLagi_Aktif === false &&
+                pinjaman &&
+                pinjaman.status_pinjam !== '1'  ? (
                   // this.pinjHisStatus(),
                   <Btn
                     title="Ajukan Pinjaman Lagi"
                     onPress={() => this.ajukanPinjamanLagi()}
                   /> ) 
-                  : null}
+                  : null} */}
               </View>
             </>
           </View>
@@ -833,6 +865,8 @@ const mapStoreToProps = state => ({
   nasabah: state.nasabah.nasabah,
   redMobile: state.register.redMobile,
   pinjaman: state.pinjaman.pinjaman,
+  // pinjaman2: state.pinjaman.pinjaman,
+  // pinjaman3: state.pinjaman.pinjaman,
   // myVirtual: state.virtual.myVirtual,
   virtual: state.virtual.virtual,
   about: state.about.about,
