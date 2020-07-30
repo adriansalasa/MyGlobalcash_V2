@@ -28,6 +28,7 @@ class MainScreen extends Component {
 
     this.state = {
       jwt: null,
+      myStat: null,
       loading: true,
       loadNasabah: 'false',
       besarPinjam: '500000',
@@ -81,6 +82,9 @@ class MainScreen extends Component {
     this.loadAbout = this.loadAbout.bind(this);
     this.loadAbout();
 
+    this.loadMyStatus = this.loadMyStatus.bind(this);
+    this.loadMyStatus();
+
     // this.slidingComplete = this.slidingComplete.bind(this);
     this.handlerChangeValue = this.handlerChangeValue.bind(this);
   }
@@ -89,6 +93,23 @@ class MainScreen extends Component {
     this.setState({
       [stateName]: stateValue,
     });
+  }
+
+  async loadMyStatus() {
+    try{
+      const myValue = await AsyncStorage.getItem('myStatus');
+      if(myValue !== null) {
+        this.setState({
+          myStat: myValue,
+        });
+        this.setState({
+          rePinjam: 2,
+        });
+        console.log('Status Gue : ' + myValue);
+      }
+    }catch(error) {
+      console.log('AsyncStorage My Status Error: ' + error.message);
+    }
   }
 
   async loadJWT() {
@@ -196,13 +217,13 @@ class MainScreen extends Component {
     // const gJWT= setTimeout(() => {
     //   this.loadJWT();
     // }, 5);
-    const stsCek = setInterval(() => {
+    const stsCek = setTimeout(() => {
       this.cekStatus();
     }, 500);
-    const MyTimer = setInterval(() => {
+    const MyTimer = setTimeout(() => {
       this.pinjStatus();
     }, 1000);
-    const MyTimer2 = setInterval(() => {
+    const MyTimer2 = setTimeout(() => {
       this.pinjStatus3();
     }, 2000);
     const MyTimer3 = setTimeout(() => {
@@ -330,7 +351,7 @@ class MainScreen extends Component {
             this.setState({N_status_pinjam: res.data.datas.status_pinjam});
             // console.log('tmpPinjm : ' + this.state.N_status_pinjam);
             // console.log('jmlBayar: ' + this.state.N_jmlBayar);
-            this.setState({rePinjam: 0});
+           // this.setState({rePinjam: 0});
             this.props.delPinjaman(this.state.jwt);
             axios({
               method: 'post',
@@ -459,11 +480,6 @@ class MainScreen extends Component {
 
   ajukanPinjamanLagi() {
     this.setState({rePinjam: 1});
-    // this.setState({virtualNew: null});
-    // this.pinjStatus();
-    this.pinjHisStatus();
-    // this.setState({historyExists: 0});
-    // clearInterval(this.MyTimer3);
   }
 
   async cekPembayaran() {
@@ -489,8 +505,9 @@ class MainScreen extends Component {
 
   apply_pinjaman() {
     // eslint-disable-next-line no-lone-blocks
+    deviceStorage.saveStatus('myStatus', 2);
     {
-      this.setState({rePinjam: 2});
+      //this.setState({rePinjam: 2});
       this.props.delPstatNull(this.state.jwt);
 
       !this.state.besarPinjam ||
@@ -581,12 +598,17 @@ class MainScreen extends Component {
           ) :  NasErr === null ? ( */}
             <>
 
-            {this.state.historyExist === 1 ? (
+            {this.state.historyExist === 1 && this.state.rePinjam === 0 ? (
                 <View style={styles.Lunas}>
                   <Image source={IMAGE.PaymentDone} />
                   <Text style={styles.LunasB1}>Anda Sudah Melunasi tagihan</Text>
                   <Text>Terimakasih Sudah mengunakan Jasa kami</Text>                  
                 </View>
+              ): this.state.historyExist === 1 && this.state.rePinjam === 1 ? (
+                <MainFresh
+                  handlerChangeValue={this.handlerChangeValue}
+                  navigation={this.props.navigation}
+                />
               ):     
              nasabah === null && this.state.historyExist === null ? (
               //  console.log('NasErr 3n: ' + NasErr),
@@ -600,7 +622,7 @@ class MainScreen extends Component {
                   source={this.state.imgWait}
                   style={{width: 256, height:250}}
                 />
-              ) : nasabah && nasabah.verified_status === 2 && pinjaman  === null ? (
+              ) : nasabah && nasabah.verified_status === 2 && pinjaman  === null && this.state.rePinjam === 0 ? (
                   <MainFresh
                     handlerChangeValue={this.handlerChangeValue}
                     navigation={this.props.navigation}
@@ -608,7 +630,8 @@ class MainScreen extends Component {
               ) : nasabah &&
                 nasabah.verified_status === 2 &&
                 pinjaman &&
-                pinjaman.status_pinjam === '1' ? (
+                pinjaman.status_pinjam === '1' &&
+                this.state.rePinjam === 2  ? (
                   <Image
                   source={this.state.usrWait}
                   style={{width: 268, height:250}}
@@ -732,11 +755,19 @@ class MainScreen extends Component {
               ) : null} */}
 
               <View style={{width: '90%', paddingTop: 20}}>
-              {this.state.historyExist === 1 ? (
+              {this.state.historyExist === 1 && this.state.rePinjam === 0 ? (
                      <Btn
                      title="Ajukan Pinjaman Lagi"
                      onPress={() => this.ajukanPinjamanLagi()} 
                      />
+              ): this.state.historyExist === 1 && this.state.rePinjam === 1 &&
+                  nasabah &&
+                  nasabah.verified_status === 2 &&
+                  pinjaman  === null ? (
+                  <Btn
+                    title="AJUKAN PINJAMAN"
+                    onPress={() => this.apply_pinjaman()}
+                    />
               ): nasabah && nasabah === null && this.state.historyExist === null ? (
                   <Btn title="LENGKAPI DATA" onPress={() => this._Ajukan()} />
                 ) : nasabah && nasabah.verified_status === 1 ? (

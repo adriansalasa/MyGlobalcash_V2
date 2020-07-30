@@ -140,8 +140,8 @@ class FormVirtualAcc extends Component {
   };
 
   pasteClipboardVA = async () => {
-    await Clipboard.setString(this.state.AccVirtual);
-    alert('Virtual Account Copied!');
+   await Clipboard.setString(this.state.AccVirtual);
+    alert('Virtual Account Copied!2');
   };
 
   render() {
@@ -216,22 +216,27 @@ class FormVirtualAcc extends Component {
                   renderText={value => <Text>{value}</Text>}
                 />
               </Text>
-              <Text style={styles.jdlRed}>
+              {/* <Text style={styles.jdlRed}>
                 Mohon bayar sesuai jumlah yg tertera
-              </Text>
-              <View style={styles.copyVA_Kosong} />
+              </Text> */}
+              {/* <View style={styles.copyVA_Kosong} /> */}
 
               <View style={styles.lineStyleBawah} />
+              <View style={{bottom: 5}}><Button
+                onPress={this.pasteClipboardPinjaman}
+                title="salin jumlah bayar"
+              /></View>
 
               <View style={styles.lblVA}>
-                <Text style={styles.labelText}>Rekening Virtual Anda</Text>
+                {/* <Text style={styles.labelText}>Rekening Virtual Anda</Text> */}
               </View>
-              <View style={styles.OptionsBaris}>
-                <View style={styles.Label}>
-                  <Text style={styles.textInput}>{this.state.AccVirtual1}</Text>
-                </View>
+              {/* <View style={styles.OptionsBaris}> */}
+                {/* <View style={styles.Label}> */}
+                  <Text style={styles.textInput}>{this.state.AccVirtual1}-{this.state.AccVirtual2}
+                  -{this.state.AccVirtual3}-{this.state.AccVirtual4}</Text>
+                {/* </View> */}
 
-                <View style={styles.Label}>
+                {/* <View style={styles.Label}>
                   <Text style={styles.textInput}>{this.state.AccVirtual2}</Text>
                 </View>
 
@@ -241,8 +246,10 @@ class FormVirtualAcc extends Component {
 
                 <View style={styles.Label}>
                   <Text style={styles.textInput}>{this.state.AccVirtual4}</Text>
-                </View>
-              </View>
+                </View> */}
+              {/* </View> */}
+              
+              
               {/* <View style={styles.OptionsBaris}>
                 <Text
                   style={styles.copyVA_Input}
@@ -252,7 +259,13 @@ class FormVirtualAcc extends Component {
               </View> */}
               <View style={styles.lineStyleAkhir} />
             </View>
-            <View style={styles.BtnjmlPinjm}>
+            <View style={{marginTop: 50}}>
+            <Button
+                onPress={this.pasteClipboardVA}
+                title="salin rekening virtual anda"
+              />
+              </View>
+            {/* <View style={styles.BtnjmlPinjm}>
               <Button
                 onPress={this.pasteClipboardPinjaman}
                 title="salin jumlah bayar"
@@ -264,7 +277,7 @@ class FormVirtualAcc extends Component {
                 onPress={this.pasteClipboardVA}
                 title="salin rekening virtual anda"
               />
-            </View>
+            </View> */}
           </>
         ) : null}
       </>
@@ -303,7 +316,7 @@ const styles = StyleSheet.create({
     // color: 'black',
     // // textDecorationStyle: 'dotted',
     // fontSize: 12,
-    top: 20,
+    top: 45,
     marginTop: 15,
     borderStyle: 'dashed',
     borderWidth: 2,
@@ -316,7 +329,7 @@ const styles = StyleSheet.create({
     // // textDecorationStyle: 'dotted',
     // fontSize: 12,
     top: 20,
-    marginTop: 65,
+    marginTop: 60,
     width: '100%',
   },
   Currency: {
@@ -351,7 +364,7 @@ const styles = StyleSheet.create({
   },
   OptionsPinjam: {flexDirection: 'row', marginTop: 20},
   OptionsBaris: {flexDirection: 'row', marginTop: 10},
-  lblVA: {flexDirection: 'row', marginTop: 30},
+  lblVA: {flexDirection: 'row', marginTop: 15},
   BtnjmlPinjm: {flexDirection: 'row', marginTop: 250},
   BtnVA: {flexDirection: 'row', marginTop: 120, top: 5},
   OptionsBarisPNR: {flexDirection: 'row', marginTop: 20},
@@ -359,7 +372,7 @@ const styles = StyleSheet.create({
   OptionsPeriod: {flexDirection: 'row', marginTop: 15, marginBottom: 10},
   OptionsPinjamJdl: {
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 30,
     marginLeft: 10,
     color: 'grey',
   },
@@ -436,13 +449,13 @@ const styles = StyleSheet.create({
   textInput: {
     // height: 50,
     backgroundColor: 'white',
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 4,
     borderWidth: 1,
     borderColor: 'green',
     borderRadius: 5,
-    padding: 10,
-    fontSize: 18,
+    padding: 4,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   bluetextInput: {
